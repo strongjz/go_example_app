@@ -1,0 +1,40 @@
+version: '3'
+services:
+  go-example:
+    depends_on:
+      - mysql
+    image: strongjz/golang_example:0.0.1
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - fullstack
+  mysql:
+    image: mysql:8.0.19
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_HOST=${DB_HOST}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - database_mysql:/var/lib/mysql
+    networks:
+      - fullstack
+
+volumes:
+  api:
+  database_mysql:
+
+networks:
+  fullstack:
+    driver: bridge
