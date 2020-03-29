@@ -1,7 +1,10 @@
-OUTPUT = app
-REGISTRY = strongjz
-IMAGE = golang_example
-VERSION = 0.0.1
+OUTPUT ?= golang_example
+REGISTRY ?= strongjz
+IMAGE ?= golang_example
+VERSION ?= 0.0.1
+
+include .env
+export
 
 .PHONY: test clean install
 
@@ -14,20 +17,20 @@ clean:
 install:
 	go get .
 
-build:
+build: install
 	go build -o $(OUTPUT) main.go
 
-run:
+run: install
 	go run main.go
 
 compose_up:
-	source .env && docker-compose up
+	docker-compose up
 
 docker_build:
 	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION) .
 
 docker_run:
-	docker run --env-file=.env -it --rm -p 8080:8080 $(REGISTRY)/$(IMAGE):$(VERSION)
+	docker run --env-file=.env -it --rm -p 8080:8080 -p 8090:8090 $(REGISTRY)/$(IMAGE):$(VERSION)
 
-docker_push:
+docker_push: docker_build
 	docker push $(REGISTRY)/$(IMAGE):$(VERSION)

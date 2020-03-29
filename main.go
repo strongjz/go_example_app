@@ -4,12 +4,31 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	_"github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+	"log"
 	"os"
 )
 
 func main() {
+
+	go func() {
+		routerAdmin := gin.Default()
+
+		routerAdmin.GET("/admin", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"message": "Admin Sections",
+			})
+		})
+		routerAdmin.Run(":8090")
+	}()
+
 	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Default Page",
+		})
+	})
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -28,13 +47,9 @@ func main() {
 		db := CreateCon()
 
 		err := db.Ping()
-
-		fmt.Printf("Error: %v/n", err)
-
 		if err != nil {
-			fmt.Println(err.Error())
 			c.JSON(500, gin.H{
-				"message": "db is not connected",
+				"message": "DB is not connected",
 			})
 
 		}else{
@@ -54,18 +69,15 @@ func CreateCon() *sql.DB {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 
-	conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", user,pass,host,port)
+	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v?sslmode=disable",user,pass,host,port)
 
-	fmt.Printf("Database Connection String: %v",conn)
+	fmt.Printf("Database Connection String: %v \n",connStr)
 
-	db, err := sql.Open("mysql", conn)
+	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("ERROR: %v", err)
 	}
-
-	defer db.Close()
-
 
 	return db
 }
