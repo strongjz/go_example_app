@@ -62,7 +62,7 @@ func main() {
 	r.Run()
 }
 
-/*Create mysql connection*/
+/*Create sql database connection*/
 func CreateCon() *sql.DB {
 	user := os.Getenv("DB_USER")
 	pass := os.Getenv("DB_PASSWORD")
