@@ -59,6 +59,18 @@ func main() {
 		}
 	})
 
+	r.GET("/host", func(c *gin.Context) {
+		node := os.Getenv("MY_NODE_NAME")
+		podIP := os.Getenv("MY_POD_IP")
+
+		information := fmt.Sprintf("NODE: %v, POD IP:%v",node, podIP)
+
+			c.JSON(200, gin.H{
+				"message": "" + information ,
+			})
+
+	})
+
 	r.Run()
 }
 
