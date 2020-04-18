@@ -33,4 +33,6 @@ docker_run:
 	docker run --env-file=.env -it --rm -p 8080:8080 -p 8090:8090 $(REGISTRY)/$(IMAGE):$(VERSION)
 
 docker_push: docker_build
-	docker push $(REGISTRY)/$(IMAGE):$(VERSION)
+	docker push $(REGISTRY)/$(IMAGE):$(VERSION) \
+	git tag -a $(VERSION \
+	git push origin --tags
