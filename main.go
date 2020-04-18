@@ -1,13 +1,11 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"log"
-	"os"
+	app "github.com/strongjz/go_example_app/app"
 )
+
 
 func main() {
 
@@ -22,74 +20,7 @@ func main() {
 		routerAdmin.Run(":8090")
 	}()
 
-	r := gin.Default()
-
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Default Page",
-		})
-	})
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-
-	r.GET("/secret", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "You should not see this",
-		})
-	})
-
-	r.GET("/data", func(c *gin.Context) {
-		db := CreateCon()
-
-		err := db.Ping()
-		if err != nil {
-			c.JSON(500, gin.H{
-				"message": "DB is not connected",
-			})
-
-		}else{
-			c.JSON(200, gin.H{
-				"message": "Database Connected",
-			})
-		}
-	})
-
-	r.GET("/host", func(c *gin.Context) {
-		node := os.Getenv("MY_NODE_NAME")
-		podIP := os.Getenv("MY_POD_IP")
-
-		information := fmt.Sprintf("NODE: %v, POD IP:%v",node, podIP)
-
-			c.JSON(200, gin.H{
-				"message": "" + information ,
-			})
-
-	})
-
-	r.Run()
+	app := app.New()
+	app.Start()
 }
 
-/*Create sql database connection*/
-func CreateCon() *sql.DB {
-	user := os.Getenv("DB_USER")
-	pass := os.Getenv("DB_PASSWORD")
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-
-	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v?sslmode=disable",user,pass,host,port)
-
-	fmt.Printf("Database Connection String: %v \n",connStr)
-
-	db, err := sql.Open("postgres", connStr)
-
-	if err != nil {
-		log.Fatalf("ERROR: %v", err)
-	}
-
-	return db
-}
