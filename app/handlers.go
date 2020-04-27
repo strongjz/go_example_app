@@ -22,8 +22,13 @@ func rootHandler(c *gin.Context) {
 }
 
 func pingHandler(c *gin.Context){
+
+	version := os.Getenv("VERSION")
+
+	message := fmt.Sprintf("Pong Version %v", version)
+
 	c.JSON(200, gin.H{
-		"message": "pong",
+		"message": message,
 	})
 }
 
