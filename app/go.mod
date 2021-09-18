@@ -1,4 +1,4 @@
-module github.com/strongjz/go_example_app/app@0.0.0
+module github.com/strongjz/go_example_app/app
 
 go 1.16
 
