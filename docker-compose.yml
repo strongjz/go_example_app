@@ -7,15 +7,18 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
     networks:
       - fullstack
   go-example:
     depends_on:
       - db
-    image: strongjz/golang_example:0.0.5
+    image: strongjz/golang_example:0.0.6
     ports:
-      - "8080:8080"
-      - "8090:8090"
+      - "${PORT}:${PORT}"
+      - "${AD_PORT}:${AD_PORT}"
     restart: always
     environment:
       DB_HOST: ${DB_HOST}
@@ -24,6 +27,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       PORT: ${PORT}
+      AD_PORT: ${AD_PORT}
       VERSION: ${VERSION}
     networks:
       - fullstack

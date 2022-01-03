@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	app "github.com/strongjz/go_example_app/app"
+	"github.com/strongjz/go_example_app/app"
 )
 
 func main() {
@@ -19,14 +19,8 @@ func main() {
 		routerAdmin.Run(":8090")
 	}()
 
-
 	app := app.New()
-
 	fmt.Println("Starting App")
-
 	app.Engine()
-
 	app.Start()
-
 }
-

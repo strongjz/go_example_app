@@ -9,19 +9,13 @@ import (
 	"os"
 )
 
-func adminHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Admin Sections",
-	})
-}
-
 func rootHandler(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Default Page",
 	})
 }
 
-func pingHandler(c *gin.Context){
+func pingHandler(c *gin.Context) {
 
 	version := os.Getenv("VERSION")
 
@@ -47,47 +41,48 @@ func dataHandler(c *gin.Context) {
 			"message": "DB is not connected",
 		})
 
-	}else{
+	} else {
 		c.JSON(200, gin.H{
 			"message": "Database Connected",
 		})
 	}
 }
-/*Create sql database connection*/
+
+// CreateCon Creates sql database connection
 func CreateCon() *sql.DB {
 	user := os.Getenv("DB_USER")
 	pass := os.Getenv("DB_PASSWORD")
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 
-	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v?sslmode=disable",user,pass,host,port)
+	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v?sslmode=disable", user, pass, host, port)
 
-	fmt.Printf("Database Connection String: %v \n",connStr)
+	fmt.Printf("Database Connection String: %v \n", connStr)
 
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		log.Fatalf("ERROR: %v", err)
+		log.Printf("ERROR: %v", err)
+		return nil
 	}
 
 	return db
 }
-func hostHandler(c *gin.Context){
+func hostHandler(c *gin.Context) {
 	node := os.Getenv("MY_NODE_NAME")
 	podIP := os.Getenv("MY_POD_IP")
 
-	information := fmt.Sprintf("NODE: %v, POD IP:%v",node, podIP)
+	information := fmt.Sprintf("NODE: %v, POD IP:%v", node, podIP)
 
 	c.JSON(200, gin.H{
-		"message": "" + information ,
+		"message": "" + information,
 	})
 }
 
-func externalHandler(c *gin.Context){
+func externalHandler(c *gin.Context) {
 
 	c.JSON(200, gin.H{
-		"message": "External host test message" ,
+		"message": "External host test message",
 	})
 
 }
-

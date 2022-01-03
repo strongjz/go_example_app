@@ -1,7 +1,7 @@
 OUTPUT ?= golang_example
 REGISTRY ?= strongjz
 IMAGE ?= golang_example
-VERSION ?= 0.0.4
+VERSION ?= 0.0.6
 
 include .env
 export
@@ -30,7 +30,7 @@ docker_build:
 	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION) .
 
 docker_run:
-	docker run --env-file=.env -it --rm -p 8080:8080 -p 8090:8090 $(REGISTRY)/$(IMAGE):$(VERSION)
+	docker run --env-file=.env -it --rm -p $(PORT):$(PORT) -p $(AD_PORT):$(AD_PORT) $(REGISTRY)/$(IMAGE):$(VERSION)
 
 docker_push: docker_build
 	docker push $(REGISTRY)/$(IMAGE):$(VERSION); \
