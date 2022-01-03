@@ -1,7 +1,7 @@
 OUTPUT ?= golang_example
 REGISTRY ?= strongjz
 IMAGE ?= golang_example
-VERSION ?= 0.0.6
+VERSION ?= 0.0.7
 
 include .env
 export
